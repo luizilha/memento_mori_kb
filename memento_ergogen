@@ -1,0 +1,180 @@
+points:
+  zones:
+    matrix:
+      anchor:
+      columns:
+        pinkie:
+        ring:
+        middle:
+        index:
+        inner:
+      rows:
+        bottom:
+        home:
+        top:
+  mirror:
+    ref: matrix_ring_home
+    distance: 152
+outlines:
+  raw:
+    - what: rectangle
+      where: true
+      asym: both
+      size: [1cx,1cy]
+      corner: 1
+  panel:
+    - what: outline
+      name: raw
+      fillet: 0.5
+  switch_cutouts:
+    - what: rectangle
+      where: true
+      asym: left
+      size: 14
+      bound: false
+  switch_plate:
+    main:
+      what: outline
+      name: panel
+      fillet: 0.5
+    keyholes:
+      what: outline
+      name: switch_cutouts
+      operation: subtract    
+  rawT:
+    - what: rectangle
+      where: true
+      bound: true
+      size: [20,20]
+      corner: 1
+    - what: polygon
+      points:
+        - ref: matrix_index_home
+          shift: [10, 29]
+        - ref: mirror_matrix_index_home
+          shift: [10, 29]
+        - ref: matrix_inner_bottom
+          shift: [30, -10]
+        - ref: mirror_matrix_inner_bottom
+          shift: [30, -10]
+  _circles_cutouts:
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: mirror_matrix_pinkie_top
+        shift: [9.5, -9.5]
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: matrix_pinkie_top
+        shift: [9.5, -9.5]
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: matrix_pinkie_bottom
+        shift: [9.5, 9.5]
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: mirror_matrix_pinkie_bottom
+        shift: [9.5, 9.5]
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: matrix_index_top
+        shift: [9.5, -9.5]
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: mirror_matrix_index_top
+        shift: [9.5, -9.5]
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: matrix_index_bottom
+        shift: [9.5, 9.5]
+    - what: circle
+      radius: 1.25
+      where:
+      - ref: mirror_matrix_index_bottom
+        shift: [9.5, 9.5]
+  _pcb_cut_l:
+    - what: circle
+      radius: 1
+      where:
+      - ref: matrix_index_bottom
+        shift: [30.4, 5]
+    - what: rectangle
+      where: true
+      size: [2,2]
+      corner: 1
+    - what: polygon
+      points:
+        - ref: matrix_index_bottom
+          shift: [31.4, 5]
+        - ref: matrix_index_bottom
+          shift: [29.4, 5]
+        - ref: matrix_index_bottom
+          shift: [29.4, 32.9]
+        - ref: matrix_index_bottom
+          shift: [31.4, 32.9]
+    - what: circle
+      radius: 1
+      where:
+      - ref: matrix_index_bottom
+        shift: [30.4, 32.9]
+  _pcb_cut_r:
+    - what: circle
+      radius: 1
+      where:
+      - ref: mirror_matrix_index_bottom
+        shift: [30.4, 5]
+    - what: rectangle
+      where: true
+      size: [2,2]
+      corner: 1
+    - what: polygon
+      points:
+        - ref: mirror_matrix_index_bottom
+          shift: [31.4, 5]
+        - ref: mirror_matrix_index_bottom
+          shift: [29.4, 5]
+        - ref: mirror_matrix_index_bottom
+          shift: [29.4, 32.9]
+        - ref: mirror_matrix_index_bottom
+          shift: [31.4, 32.9]
+    - what: circle
+      radius: 1
+      where:
+      - ref: mirror_matrix_index_bottom
+        shift: [30.4, 32.9]
+  combined: [
+      rawT,
+      -switch_cutouts, 
+      -_circles_cutouts,
+      -_pcb_cut_l,
+      -_pcb_cut_r
+     ]
+pcbs:
+  memento:
+    outlines:
+      main:
+        outline: combined
+    footprints:
+      keys:
+        what: mx
+        where: true
+        params:
+          from: GND
+          to: "{{column_net}}"
+          keycaps: true
+          reverse: true
+          hotswap: false
+      promicro:
+        what: promicro
+        where:
+          ref: matrix_inner_bottom
+          shift: [1u, 1u]
+          rotate: -90
+        params:
+          orientation: down
